@@ -1,5 +1,6 @@
 ﻿@page "/cubelist"
 @inject CubeUseCaseList cubelist
+@inject NavigationManager navigationManager
 
 <h3>Lista de cubos</h3>
 <table class="table">
@@ -7,6 +8,7 @@
         <tr>
             <th>ID</th>
             <th>Cubo</th>
+            <th>Accion</th>
         </tr>
     </thead>
     <tbody>
@@ -14,14 +16,22 @@
             <tr>
                 <td>@cube.Id</td>
                 <td>@cube.Text</td>
+                <td>
+                    <button @onclick="()=>_ShowCube(cube)" class="btn btn-primary">Ver</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
+
 @code {
     private List<Cube> _list = new List<Cube>();
     protected override void OnInitialized(){
         _list = cubelist.Execute();
+    }
+
+    private void _ShowCube(Cube cube){
+        navigationManager.NavigateTo($"cube/{cube.Id}");
     }
 }

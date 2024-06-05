@@ -1,0 +1,61 @@
+﻿@page "/cube/{Id:int?}"
+@inject CubeUseCaseGet getCube
+@inject AlgorithmUseCaseList algorithmList
+@inject NavigationManager navigationManager
+
+<h3>@_cube.Text</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Algoritmo</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var algorithm in _list){
+            <tr>
+                <td>@algorithm.Id</td>
+                <td>@algorithm.Text</td>
+                <td>
+                    <button class="btn btn-primary">Ver</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button @onclick="Close" class="btn btn-secondary" >Cerrar</button>
+
+<Message @ref="message" Text="@st" eventCallback="Close"/>
+
+@code {
+    //cube functionality
+    [Parameter] public int? Id {get; set;}
+    private Cube _cube = new Cube();
+
+    //algorithm
+    private List<Algorithm> _list = new List<Algorithm>();
+
+    //set message
+    private Message message = null!;
+    private string st = "";
+
+    //functions
+    protected override void OnParametersSet(){
+        try{
+            if(Id != null){
+                _cube = getCube.Execute(Id.Value);
+                _list = algorithmList.Execute(_cube.Id);
+            }
+        }
+        catch (Exception e){
+            st = e.Message;
+            message.Show();
+        }
+    }
+    void Close(){
+        navigationManager.NavigateTo("/cubelist");
+    }
+}

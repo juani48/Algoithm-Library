@@ -1,0 +1,24 @@
+﻿@page "/addcube"
+
+<h3>Agregar un cubo</h3>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="Show">Click me</button>
+
+<Message @ref="message" eventCallback="IncrementCount" Text="Seguro que quiere incrementar?"/>
+
+@code {
+    private int currentCount = 0;
+
+
+    Message message = null!;
+
+    void Show(){
+        message.Show();
+    }
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

@@ -1,0 +1,28 @@
+﻿@namespace Solution.MAUI_Blazor.Components
+
+@if(_show){
+    <div class="div1">
+        <div class="div2">
+            <h3>@Text</h3>
+            <button @onclick="()=>Close(true)" class="btn btn-primary" >Aceptar</button>
+            <button @onclick="()=>Close(false)" class="btn btn-secondary" >Cancelar</button>
+        </div>
+    </div>
+}
+
+@code {
+    bool _show = false;
+    [Parameter] public string Text {get; set;} = "";
+    [Parameter] public EventCallback eventCallback {get; set;}
+
+    void Close(bool ok){
+        _show = false;
+        if(ok){
+            eventCallback.InvokeAsync();
+        }
+    }
+
+    public void Show(){
+        _show = true;
+    }
+}

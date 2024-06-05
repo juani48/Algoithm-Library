@@ -40,9 +40,9 @@ public class AlgorithmRepository : IRepositoryAlgorithm
         return db.Algorithms.Where(algorithm => algorithm.Id == id).SingleOrDefault();
     }
 
-    public List<Algorithm> GetAlgorithms()
+    public List<Algorithm> GetAlgorithms(int cubeId)
     {
         using var db = new Context();
-        return db.Algorithms.ToList();
+        return db.Algorithms.Where(algorithm => algorithm.CubeId == cubeId).ToList();
     }
 }

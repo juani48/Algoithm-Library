@@ -1,6 +1,4 @@
 ﻿namespace Solution.Aplication.Entity;
-using Solution.Aplication.Entity;
-
 public class Cube : IEntity
 {
     public int Id { get; set; }

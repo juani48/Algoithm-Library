@@ -1,11 +1,11 @@
 ﻿using Solution.Aplication.Interface;
+namespace Solution.Aplication.UseCase.Algorithm;
 using Solution.Aplication.Entity;
-namespace Solution.Aplication;
 
 public class AlgorithmUseCaseList(IRepositoryAlgorithm repositoryAlgorithm)
 {
-    public List<Algorithm> Execute(){
-        List<Algorithm> algorithms = repositoryAlgorithm.GetAlgorithms();
+    public List<Algorithm> Execute(int cubeId){
+        List<Algorithm> algorithms = repositoryAlgorithm.GetAlgorithms(cubeId);
         if(algorithms != null){
             return algorithms;
         }
