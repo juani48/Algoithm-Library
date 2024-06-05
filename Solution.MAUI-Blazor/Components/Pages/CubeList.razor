@@ -1,0 +1,27 @@
+﻿@page "/cubelist"
+@inject CubeUseCaseList cubelist
+
+<h3>Lista de cubos</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cubo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var cube in _list){
+            <tr>
+                <td>@cube.Id</td>
+                <td>@cube.Text</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Cube> _list = new List<Cube>();
+    protected override void OnInitialized(){
+        _list = cubelist.Execute();
+    }
+}
