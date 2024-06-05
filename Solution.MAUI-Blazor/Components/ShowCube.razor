@@ -1,23 +1,29 @@
 ﻿@page "/cube/{Id:int?}"
+@using Solution.MAUI_Blazor.Components
 @inject CubeUseCaseGet getCube
 @inject AlgorithmUseCaseList algorithmList
 @inject NavigationManager navigationManager
 
 <h3>@_cube.Text</h3>
-
+<h5>Algoritmos del cubo</h5>
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Algoritmo</th>
+            <th>Descripción</th>
             <th>Accion</th>
         </tr>
     </thead>
     <tbody>
         @foreach(var algorithm in _list){
             <tr>
-                <td>@algorithm.Id</td>
                 <td>@algorithm.Text</td>
+                @if(@algorithm.Description == ""){
+                    <td>El algoritmo no tiene una descripción.</td>
+                }
+                else{
+                    <td>@algorithm.Description</td>
+                }
                 <td>
                     <button class="btn btn-primary">Ver</button>
                 </td>
@@ -28,7 +34,7 @@
 
 <button @onclick="Close" class="btn btn-secondary" >Cerrar</button>
 
-<Message @ref="message" Text="@st" eventCallback="Close"/>
+<Message @ref="@_message" Text="@stMessage" eventCallback="Close"/>
 
 @code {
     //cube functionality
@@ -39,8 +45,8 @@
     private List<Algorithm> _list = new List<Algorithm>();
 
     //set message
-    private Message message = null!;
-    private string st = "";
+    private Message _message = null!;
+    private string stMessage = "";
 
     //functions
     protected override void OnParametersSet(){
@@ -51,8 +57,8 @@
             }
         }
         catch (Exception e){
-            st = e.Message;
-            message.Show();
+            stMessage = e.Message;
+            //_message.Show();
         }
     }
     void Close(){
