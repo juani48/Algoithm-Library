@@ -1,0 +1,94 @@
+﻿@page "/add/{Id:int?}"
+@inject CubeUseCaseAdd addCube
+@inject AlgorithmUseCaseAdd addAlgorithm
+@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+@if(option){
+    <h3>Agregar Cubo</h3>
+    <input placeholder="Nombre del cubo" @bind="@_cube.Text" class="form-control">
+    <input placeholder="Descripcion" @bind="@_algorithm.Description" class="form-control">
+}
+else{
+    <h3>Agregar Algoritmo</h3>
+    <input placeholder="Algoritmo" @bind="@_algorithm.Text" class="form-control">
+    <input placeholder="Descripcion" @bind="@_algorithm.Description" class="form-control">
+}
+<button @onclick="()=>Show(true)" class="btn btn-primary"  >Aceptar</button>
+<button @onclick="()=>Show(false)" class="btn btn-secondary" >Cancelar</button>
+
+<Message @ref="acceptMessage" eventCallback="_Add" Text="@_addMessage"/>
+<Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
+<Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/>
+
+@code {
+    private Cube _cube = null!;
+    private Algorithm _algorithm = null!;
+    private string _addMessage = "";
+    [Parameter] public int? Id {get; set;}
+    private bool option;
+    protected override void OnParametersSet(){
+        if(Id == 0){
+            _cube = new Cube();
+            option = true;
+            _addMessage = "¿Seguro que desea agregar el nuevo cubo?";
+        }
+        else{
+            option = false;
+            _algorithm = new Algorithm();
+            _algorithm.CubeId = Id.Value;
+            _addMessage = "¿Seguro que desea agregar el nuevo algoritmo?";
+        }
+    }
+
+    private Message acceptMessage = null!;
+    private Message cancelMessage = null!;
+    private Message errorMessage = null!;
+    private string _stMessage = "";
+    private void Show(bool ok){
+        if(ok){
+            acceptMessage.ShowMessage();
+        }
+        else{
+            cancelMessage.ShowMessage();
+        }
+    }
+    private void _Add(){
+        try{
+            if(option){
+                addCube.Execute(_cube);
+                Id = _cube.Id;
+                _cube = new Cube();
+                navigationManager.NavigateTo($"/cube/{Id}");
+            }
+            else{
+                addAlgorithm.Execute(_algorithm);
+                Id = _algorithm.CubeId;
+                _algorithm = new Algorithm();
+                navigationManager.NavigateTo($"/cube/{Id}");
+            }
+        }
+        catch (Exception e){
+            _stMessage = "Ah ocurrido un error inesperado!" + e.Message;
+            errorMessage.ShowMessage();
+        }
+    }
+    private void _Clean(){
+        if(option){
+            _cube = new Cube();
+        }
+        else{
+            _algorithm = new Algorithm();
+        }
+    }
+    private void _Close(){
+        if(option){
+            _cube = new Cube();
+            navigationManager.NavigateTo("/cubelist");
+        }
+        else{
+            _algorithm = new Algorithm();
+            navigationManager.NavigateTo($"/cube/{Id}");
+        }
+    }
+}

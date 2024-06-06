@@ -1,12 +1,10 @@
-﻿@page "/cube/{Id:int?}"
+﻿@page "/cube/{Id:int}"
 @using Solution.MAUI_Blazor.Components
 @inject CubeUseCaseGet getCube
 @inject AlgorithmUseCaseList algorithmList
 @inject NavigationManager navigationManager
 
 <h3>@_cube.Text</h3>
-
-<button @onclick="ShowComponent" class="btn btn-primary">Agregar Algoritmo</button>
 
 <h5>Algoritmos del cubo</h5>
 <table class="table">
@@ -32,6 +30,13 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td>---</td>
+            <td>---</td>
+            <td>
+                <button @onclick="_GoAddAlgorithm" class="btn btn-primary" >Agregar Algoritmo</button>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -39,17 +44,14 @@
 
 <Message @ref="@_errorMessage" Text="@stMessage" eventCallback="Close"/>
 
-<AddAlgorithm @ref="component" Id="@_cube.Id"/>
 
 @code {
     //cube functionality
-    [Parameter] public int? Id {get; set;}
+    [Parameter] public int Id {get; set;}
     private Cube _cube = new Cube();
 
     //algorithm
     private List<Algorithm> _list = new List<Algorithm>();
-    private AddAlgorithm component = null!;
-
     //set message
     private Message _errorMessage = null!;
     private string stMessage = "";
@@ -57,20 +59,19 @@
     //functions
     protected override void OnParametersSet(){
         try{
-            if(Id != null){
-                _cube = getCube.Execute(Id.Value);
-                _list = algorithmList.Execute(_cube.Id);
-            }
+            _cube = getCube.Execute(Id);
+            _list = algorithmList.Execute(_cube.Id);
         }
         catch (Exception e){
+            _errorMessage = null!;
             stMessage = e.Message;
             //_errorMessage.ShowMessage();
         }
     }
-    void Close(){
+    private void Close(){
         navigationManager.NavigateTo("/cubelist");
     }
-    private void ShowComponent(){
-        component.ShowAlgorithm();
+    private void _GoAddAlgorithm(){
+        navigationManager.NavigateTo($"/add/{Id}");
     }
 }

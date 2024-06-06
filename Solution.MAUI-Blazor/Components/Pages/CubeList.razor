@@ -7,6 +7,7 @@
     <thead>
         <tr>
             <th>Cubo</th>
+            <th>Descripcion</th>
             <th>Accion</th>
         </tr>
     </thead>
@@ -14,12 +15,19 @@
         @foreach(var cube in _list){
             <tr>
                 <td>@cube.Text</td>
+                @if(cube.Description == ""){
+                    <td>El cubo no tiene descripción.</td>
+                }
+                else{
+                    <td>@cube.Description</td>
+                }
                 <td>
                     <button @onclick="()=>_ShowCube(cube)" class="btn btn-primary">Ver</button>
                 </td>
             </tr>
         }
         <tr>
+            <td>---</td>
             <td>---</td>
             <td>
                 <button @onclick="_GoAddCube" class="btn btn-primary" >Agregar cubo</button>
@@ -39,6 +47,6 @@
         navigationManager.NavigateTo($"cube/{cube.Id}");
     }
     private void _GoAddCube(){
-        navigationManager.NavigateTo("/addcube");
+        navigationManager.NavigateTo($"/add/{0}");
     }
 }
