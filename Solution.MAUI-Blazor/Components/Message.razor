@@ -3,9 +3,9 @@
 @if(_show){
     <div class="div1">
         <div class="div2">
-            <h3>@Text</h3>
-            <button @onclick="()=>Close(true)" class="btn btn-primary" >Aceptar</button>
-            <button @onclick="()=>Close(false)" class="btn btn-secondary" >Cancelar</button>
+            <h4>@Text</h4>
+            <button @onclick="()=>CloseMessage(true)" class="btn btn-primary" >Aceptar</button>
+            <button @onclick="()=>CloseMessage(false)" class="btn btn-secondary" >Cancelar</button>
         </div>
     </div>
 }
@@ -15,14 +15,13 @@
     [Parameter] public string Text {get; set;} = "";
     [Parameter] public EventCallback eventCallback {get; set;}
 
-    void Close(bool ok){
+    void CloseMessage(bool ok){
         _show = false;
         if(ok){
             eventCallback.InvokeAsync();
         }
     }
-
-    public void Show(){
+    public void ShowMessage(){
         _show = true;
     }
 }

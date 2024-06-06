@@ -6,7 +6,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Cubo</th>
             <th>Accion</th>
         </tr>
@@ -14,7 +13,6 @@
     <tbody>
         @foreach(var cube in _list){
             <tr>
-                <td>@cube.Id</td>
                 <td>@cube.Text</td>
                 <td>
                     <button @onclick="()=>_ShowCube(cube)" class="btn btn-primary">Ver</button>

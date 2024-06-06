@@ -1,24 +1,51 @@
 ﻿@page "/addcube"
+@inject CubeUseCaseAdd addCube
+@inject NavigationManager navigationManager
 
 <h3>Agregar un cubo</h3>
 
-<p role="status">Current count: @currentCount</p>
+<input placeholder="Nombre del cubo" @bind="@_cube.Text" class="form-control">
+<button @onclick="()=>Show(true)" class="btn btn-primary"  >Aceptar</button>
+<button @onclick="()=>Show(false)" class="btn btn-secondary" >Cancelar</button>
 
-<button class="btn btn-primary" @onclick="Show">Click me</button>
+<Message @ref="acceptMessage" eventCallback="_Add" Text="¿Seguro que desea agregar el nuevo cubo?"/>
+<Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
 
-<Message @ref="message" eventCallback="IncrementCount" Text="Seguro que quiere incrementar?"/>
+<Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/>
 
 @code {
-    private int currentCount = 0;
-
-
-    Message message = null!;
-
-    void Show(){
-        message.Show();
+    //cube logic
+    private Cube _cube = new Cube();
+    //message
+    private Message acceptMessage = null!;
+    private Message cancelMessage = null!;
+    private Message errorMessage = null!;
+    private string _stMessage = "";
+    private void Show(bool ok){
+        if(ok){
+            acceptMessage.ShowMessage();
+        }
+        else{
+            cancelMessage.ShowMessage();
+        }
     }
-    private void IncrementCount()
-    {
-        currentCount++;
+    private void _Add(){
+        try{
+            addCube.Execute(_cube);
+            int id = _cube.Id;
+            _cube = new Cube();
+            navigationManager.NavigateTo($"/cube/{id}");
+        }
+        catch (Exception e){
+            _stMessage = "Ah ocurrido un error inesperado!" + e.Message;
+            errorMessage.ShowMessage();
+        }
+    }
+    private void _Clean(){
+        _cube = new Cube();
+    }
+    private void _Close(){
+        _cube = new Cube();
+        navigationManager.NavigateTo("/cubelist");
     }
 }
