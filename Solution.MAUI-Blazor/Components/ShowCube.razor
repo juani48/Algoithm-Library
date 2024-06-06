@@ -34,7 +34,7 @@
 
 <button @onclick="Close" class="btn btn-secondary" >Cerrar</button>
 
-<Message @ref="@_message" Text="@stMessage" eventCallback="Close"/>
+<Message @ref="@_errorMessage" Text="@stMessage" eventCallback="Close"/>
 
 @code {
     //cube functionality
@@ -45,7 +45,7 @@
     private List<Algorithm> _list = new List<Algorithm>();
 
     //set message
-    private Message _message = null!;
+    private Message _errorMessage = null!;
     private string stMessage = "";
 
     //functions
@@ -58,7 +58,7 @@
         }
         catch (Exception e){
             stMessage = e.Message;
-            //_message.Show();
+            _errorMessage.ShowMessage();
         }
     }
     void Close(){
