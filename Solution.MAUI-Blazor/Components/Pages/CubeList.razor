@@ -19,6 +19,12 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td>---</td>
+            <td>
+                <button @onclick="_GoAddCube" class="btn btn-primary" >Agregar cubo</button>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -31,5 +37,8 @@
 
     private void _ShowCube(Cube cube){
         navigationManager.NavigateTo($"cube/{cube.Id}");
+    }
+    private void _GoAddCube(){
+        navigationManager.NavigateTo("/addcube");
     }
 }

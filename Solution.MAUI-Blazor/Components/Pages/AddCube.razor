@@ -1,4 +1,4 @@
-﻿@page "/addcube"
+﻿@page "/addcube" 
 @inject CubeUseCaseAdd addCube
 @inject NavigationManager navigationManager
 
@@ -12,6 +12,8 @@
 <Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
 
 <Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/>
+
+
 
 @code {
     //cube logic

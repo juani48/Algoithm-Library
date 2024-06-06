@@ -1,0 +1,61 @@
+﻿@inject AlgorithmUseCaseAdd addAlgorithm
+
+@if(_visibility){
+    <h3>AddAlgorithm</h3>
+
+    <input placeholder="Algoritmo" @bind="@_algorithm.Text" class="form-control">
+    <input placeholder="Descripcion" @bind="@_algorithm.Description" class="form-control">
+    <button @onclick="()=>Show(true)" class="btn btn-primary"  >Aceptar</button>
+    <button @onclick="()=>Show(false)" class="btn btn-secondary" >Cancelar</button>
+
+    <Message @ref="acceptMessage" eventCallback="_Add" Text="¿Seguro que desea agregar el nuevo cubo?"/>
+    <Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
+
+    <Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/>
+}
+
+
+@code {
+    //algorithm logic
+    private Algorithm _algorithm = new Algorithm();
+    [Parameter] public int Id {get; set;}
+    private bool _visibility = false;
+
+    //message
+    private Message acceptMessage = null!;
+    private Message cancelMessage = null!;
+    private Message errorMessage = null!;
+    private string _stMessage = "";
+
+    public void ShowAlgorithm(){
+        _visibility = true;
+    }
+
+    private void Show(bool ok){
+        if(ok){
+            acceptMessage.ShowMessage();
+        }
+        else{
+            cancelMessage.ShowMessage();
+        }
+    }
+    private void _Add(){
+        try{
+            _algorithm.CubeId = Id;
+            addAlgorithm.Execute(_algorithm);
+            _algorithm = new Algorithm();
+            _visibility = false;
+        }
+        catch (Exception e){
+            _stMessage = "Ah ocurrido un error inesperado!" + e.Message;
+            errorMessage.ShowMessage();
+        }
+    }
+    private void _Clean(){
+        _algorithm = new Algorithm();
+    }
+    private void _Close(){
+        _algorithm = new Algorithm();
+        _visibility = false;
+    }
+}
