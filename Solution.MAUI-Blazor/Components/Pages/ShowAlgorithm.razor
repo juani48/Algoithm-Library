@@ -1,0 +1,27 @@
+﻿@page "/algorithm/{Id:int}"
+@inject AlgorithmUseCaseGet get
+
+@if(!_error){
+    <h3>@_algorithm.Description</h3>
+    <h4>@_algorithm.Text</h4>
+}
+else{
+    <ComponentError @Text="@_st" @Url="/cubelist"/>
+}
+
+@code {
+    [Parameter] public int Id {get; set;} //AlgorithmID
+    private bool _error = false;
+    private string _st = "";
+    private Algorithm _algorithm = new Algorithm();
+
+    protected override void OnParametersSet(){
+        try{
+            _algorithm = get.Execute(Id);
+        }
+        catch (Exception e){
+            _st = "Ah ocurrido un error inesperado." + e.Message;
+            _error = true;
+        }
+    }
+}

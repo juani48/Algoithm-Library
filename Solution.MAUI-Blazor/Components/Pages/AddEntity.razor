@@ -1,13 +1,12 @@
 ﻿@page "/add/{Id:int?}"
 @inject CubeUseCaseAdd addCube
 @inject AlgorithmUseCaseAdd addAlgorithm
-@rendermode InteractiveServer
 @inject NavigationManager navigationManager
 
 @if(option){
     <h3>Agregar Cubo</h3>
     <input placeholder="Nombre del cubo" @bind="@_cube.Text" class="form-control">
-    <input placeholder="Descripcion" @bind="@_algorithm.Description" class="form-control">
+    <input placeholder="Descripcion" @bind="@_cube.Description" class="form-control">
 }
 else{
     <h3>Agregar Algoritmo</h3>
@@ -17,9 +16,9 @@ else{
 <button @onclick="()=>Show(true)" class="btn btn-primary"  >Aceptar</button>
 <button @onclick="()=>Show(false)" class="btn btn-secondary" >Cancelar</button>
 
-<Message @ref="acceptMessage" eventCallback="_Add" Text="@_addMessage"/>
-<Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
-<Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/>
+<Message @ref="acceptMessage" eventCallback="_Add" Text="@_addMessage"/> <!--Agregar-->
+<Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/> <!--Salir-->
+<Message @ref="errorMessage" eventCallback="_Clean" Text="@_stMessage"/> <!--Error-->
 
 @code {
     private Cube _cube = null!;
@@ -28,7 +27,7 @@ else{
     [Parameter] public int? Id {get; set;}
     private bool option;
     protected override void OnParametersSet(){
-        if(Id == 0){
+        if(Id == null){
             _cube = new Cube();
             option = true;
             _addMessage = "¿Seguro que desea agregar el nuevo cubo?";

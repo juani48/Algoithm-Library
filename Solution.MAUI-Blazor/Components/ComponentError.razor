@@ -1,0 +1,12 @@
+﻿@inject NavigationManager navigationManager
+
+<h3>@Text</h3>
+<button @onclick="_Close" class="btn btn-secondary" >Volver</button>
+
+@code {
+    [Parameter] public string Text {get; set;} = "";
+    [Parameter] public string Url {get; set;} = "";
+    private void _Close(){
+        navigationManager.NavigateTo(Url);
+    }
+}

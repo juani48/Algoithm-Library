@@ -10,6 +10,7 @@ public class Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("data source=DataBase.db");
+        //optionsBuilder.UseSqlite($"Filename={System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)}");
+        optionsBuilder.UseSqlite("data source=DataBese.db");
     }
 }

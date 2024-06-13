@@ -6,4 +6,5 @@ public interface IRepositoryAlgorithm
     List<Algorithm> GetAlgorithms(int cubeId);
     Algorithm? GetAlgorithm(int id);
     bool DeleteAlgorithm(int id);
+    bool ModifyAlgorithm(Algorithm algorithm); 
 }

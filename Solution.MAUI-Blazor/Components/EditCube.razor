@@ -1,0 +1,54 @@
+﻿@inject CubeUseCaseModify modify
+
+@if(!_error){
+    @if(_show){
+        <input placeholder="Nombre del cubo" @bind="@_cube.Text" class="form-control">
+        <input placeholder="Descripcion" @bind="@_cube.Description" class="form-control">
+
+        <button @onclick="()=>Show(true)" class="btn btn-primary"  >Aceptar</button>
+        <button @onclick="()=>Show(false)" class="btn btn-secondary" >Cancelar</button>
+    } 
+    <Message @ref="modifyMessage" eventCallback="_Modify" Text=""/>
+    <Message @ref="cancelMessage" eventCallback="_Close" Text="¿Seguro que desea salir de este apartado? Los datos que haya cargado desaparecerán."/>
+}
+else{
+    <ComponentError @Text="@_stError" Url="@_url" />
+}
+
+
+@code {
+    private bool _show = false;
+    private int _id;
+    private Cube _cube = new Cube();
+    public void ShowComponent(int id){
+        _show = true;
+        _id = id;
+    }
+    private Message cancelMessage = null!;
+    private Message modifyMessage = null!;
+    private void _Close(){
+        _show = false;
+    }
+    private void Show(bool ok){
+        if(ok){
+            modifyMessage.ShowMessage();
+        }
+        else{
+            cancelMessage.ShowMessage();
+        }
+    }
+    private bool _error = false;
+    private string _stError = "";
+    private string _url = "";
+    private void _Modify(){
+        try{
+           modify.Execute(_cube); 
+        }
+        catch (Exception e){
+            _stError = $"Ah ocurrido un error inesperado. {e.Message}";
+            _url = $"/cube/{_id}";
+            _error = true;
+        }
+    }
+}
+

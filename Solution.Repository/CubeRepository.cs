@@ -16,7 +16,7 @@ public class CubeRepository : IRepositoryCube
                 Text = "Test2"
             });
             db.SaveChanges();
-            Console.WriteLine("Se creo la base de datos.");
+            Console.WriteLine("Se creo la base de datos. System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)");
         }
     }
     
@@ -51,5 +51,19 @@ public class CubeRepository : IRepositoryCube
     {
         using var db = new Context();
         return db.Cubes.ToList();
+    }
+
+    public bool ModifyCube(Cube cube)
+    {
+        using var db = new Context();
+        var query = db.Cubes.Where(_cube => _cube.Id == cube.Id).SingleOrDefault();
+        if(query != null){
+            query = cube;
+            db.SaveChanges();
+            return true;
+        }   
+        else{
+            return false;
+        }
     }
 }

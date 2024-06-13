@@ -6,4 +6,5 @@ public interface IRepositoryCube
     List<Cube> GetCubes();
     Cube? GetCube(int id);
     bool DeleteCube(int id);
+    bool ModifyCube(Cube cube); 
 }

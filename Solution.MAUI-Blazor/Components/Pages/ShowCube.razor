@@ -4,46 +4,52 @@
 @inject AlgorithmUseCaseList algorithmList
 @inject NavigationManager navigationManager
 
-<h3>@_cube.Text</h3>
+@if(!_error){
+    <h3>@_cube.Text</h3>
 
-<h5>Algoritmos del cubo</h5>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Algoritmo</th>
-            <th>Descripción</th>
-            <th>Accion</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var algorithm in _list){
+    <h5>Algoritmos del cubo</h5>
+    <table class="table">
+        <thead>
             <tr>
-                <td>@algorithm.Text</td>
-                @if(@algorithm.Description == ""){
-                    <td>El algoritmo no tiene una descripción.</td>
-                }
-                else{
-                    <td>@algorithm.Description</td>
-                }
+                <th>Algoritmo</th>
+                <th>Descripción</th>
+                <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var algorithm in _list){
+                <tr>
+                    <td>@algorithm.Text</td>
+                    @if(@algorithm.Description == ""){
+                        <td>El algoritmo no tiene una descripción.</td>
+                    }
+                    else{
+                        <td>@algorithm.Description</td>
+                    }
+                    <td>
+                        <button class="btn btn-primary">Ver</button>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>---</td>
+                <td>---</td>
                 <td>
-                    <button class="btn btn-primary">Ver</button>
+                    <button @onclick="_GoAddAlgorithm" class="btn btn-primary" >Agregar Algoritmo</button>
                 </td>
             </tr>
-        }
-        <tr>
-            <td>---</td>
-            <td>---</td>
-            <td>
-                <button @onclick="_GoAddAlgorithm" class="btn btn-primary" >Agregar Algoritmo</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<button @onclick="Close" class="btn btn-secondary" >Cerrar</button>
+    <button  class="btn btn-primary" >Editar</button>
+    <button @onclick="Close" class="btn btn-secondary" >Cerrar</button>
 
-<Message @ref="@_errorMessage" Text="@stMessage" eventCallback="Close"/>
+}
+else{
+    <ComponentError @Text="@_stError" @Url="/cubelist"/>
+}
 
+<EditCube @ref="_editCube" />
 
 @code {
     //cube functionality
@@ -52,10 +58,10 @@
 
     //algorithm
     private List<Algorithm> _list = new List<Algorithm>();
-    //set message
-    private Message _errorMessage = null!;
-    private string stMessage = "";
-
+    
+    //error
+    private string _stError = "";
+    private bool _error = false;
     //functions
     protected override void OnParametersSet(){
         try{
@@ -63,9 +69,7 @@
             _list = algorithmList.Execute(_cube.Id);
         }
         catch (Exception e){
-            _errorMessage = null!;
-            stMessage = e.Message;
-            //_errorMessage.ShowMessage();
+            _stError = $"Ah ocurrido un error inesperado. {e.Message}";
         }
     }
     private void Close(){
@@ -73,5 +77,13 @@
     }
     private void _GoAddAlgorithm(){
         navigationManager.NavigateTo($"/add/{Id}");
+    }
+    private EditCube _editCube = null!;
+
+    private void _GoEditCube(){
+        _editCube.ShowComponent(Id);
+    }
+    private void _ShowAlgorithm(Algorithm algorithm){
+        navigationManager.NavigateTo($"/algorithm/{algorithm.Id}");
     }
 }
